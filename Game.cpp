@@ -25,7 +25,7 @@ Game::~Game() {
     delete ball;
     delete paddle;
 
-    for j(int i=0; i<NUM_BRICKS; i++) {
+    for (int i=0; i<NUM_BRICKS; i++) {
         delete bricks[i];
     }
 }
