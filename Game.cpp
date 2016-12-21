@@ -5,6 +5,7 @@
 
 Game::Game(QWidget *parent) : QWidget(parent) {
     x = 0;
+    lives=3;
     gameEnded = false;
     gameWon = false;
     paused = false;
@@ -14,12 +15,14 @@ Game::Game(QWidget *parent) : QWidget(parent) {
     score = 0;
     int numBricks = 0;
 
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 6; j++) {
-            bricks[numBricks] = new Brick((j*60), (i*22.5));
+    for (int i=0; i<5; i++) {
+        for (int j=0; j<6; j++) {
+
+            bricks[numBricks] = new Brick(j*40+30, i*10+50);
             numBricks++;
+           }
         }
-    } 
+
 }
 
 Game::~Game() {
@@ -51,9 +54,21 @@ void Game::paintEvent(QPaintEvent *evnt) {
 
 void Game::drawObjects(QPainter *painter) {
     painter->drawImage(ball->getRectangle(), ball->getImage());
+
     painter->drawImage(paddle->getRectangle(), paddle->getImage());
-    QString msg= "Score: "+QString::number(score);
-    painter->drawText(1,399,msg);
+
+    QFont font("Arial", 9 , QFont::DemiBold);
+
+    painter->setFont(font);
+
+    QString score_msg= "Score: "+QString::number(score);
+
+    QString lives_msg= "Lives: "+QString::number(lives);
+
+    painter->drawText(1,405,score_msg);
+
+    painter->drawText(240,405,lives_msg);
+
     for (int i=0; i<noBricks; i++) {
         if (!bricks[i]->isDestroyed()) {
             painter->drawImage(bricks[i]->getRectangle(), bricks[i]->getImage());
@@ -121,8 +136,14 @@ void Game::keyPressEvent(QKeyEvent *evnt) {
 
 void Game::Physics() {
 
-    if (ball->getRectangle().bottom() > BOTTOM_EDGE) {
+    if (ball->getRectangle().bottom() > BOTTOM_EDGE && lives==0) {
         endGame();
+    }
+    else if (ball->getRectangle().bottom() > BOTTOM_EDGE && lives>0){
+        lives--;
+        paddle->resetState();
+        ball->resetState();
+        pauseGame();
     }
     score=0;
     for (int i=0; i<noBricks; i++) {
@@ -138,80 +159,93 @@ void Game::Physics() {
 
     if ((ball->getRectangle()).intersects(paddle->getRectangle()))
     {
+        ball->setX(ball->getX()+paddle->getvx());
+        ball->setY(-1*ball->getY());
+    }
 
-        int paddle_Left_Pos = paddle->getRectangle().left();
-        int ball_Left_Pos = ball->getRectangle().left();
+    int ballLeft = ball->getRectangle().left();
+    int ballHeight = ball->getRectangle().height();
+    int ballWidth = ball->getRectangle().width();
+    int ballTop = ball->getRectangle().top();
 
-        int first = paddle_Left_Pos + 8;
-           int second = paddle_Left_Pos + 16;
-           int third = paddle_Left_Pos + 24;
-           int fourth = paddle_Left_Pos + 32;
-
-           if (ball_Left_Pos < first)
-           {
-             ball->setX(-1);
-             ball->setY(-1);
-           }
-
-           if (ball_Left_Pos >= first && ball_Left_Pos < second)
-           {
-             ball->setX(-1);
-             ball->setY(-1*ball->getY());
-           }
-
-           if (ball_Left_Pos >= second && ball_Left_Pos < third)
-           {
-              ball->setX(0);
-              ball->setY(-1);
-           }
-
-           if (ball_Left_Pos >= third && ball_Left_Pos < fourth)
-           {
-              ball->setX(1);
-              ball->setY(-1*ball->getY());
-           }
-
-           if (ball_Left_Pos > fourth)
-           {
-             ball->setX(1);
-             ball->setY(-1);
-           }
-         }
+    QPoint topRight(ballLeft + ballWidth + 1, ballTop - 1);
+    QPoint topLeft(ballLeft - 1, ballTop - 1);
+    QPoint bottomLeft(ballLeft - 1, ballTop +ballHeight+1);
+    QPoint bottomRight(ballLeft+ballWidth+1, ballTop + ballHeight + 1);
 
     for (int i=0; i<noBricks; i++)
     {
-        if ((ball->getRectangle()).intersects(bricks[i]->getRectangle())) {
+        if (!bricks[i]->isDestroyed() &&
+             (ball->getRectangle()).intersects(bricks[i]->getRectangle())) {
 
-            int ballLeft = ball->getRectangle().left();
-            int ballHeight = ball->getRectangle().height();
-            int ballWidth = ball->getRectangle().width();
-            int ballTop = ball->getRectangle().top();
-
-            QPoint pointRight(ballLeft + ballWidth + 1, ballTop);
-            QPoint pointLeft(ballLeft - 1, ballTop);
-            QPoint pointTop(ballLeft, ballTop -1);
-            QPoint pointBottom(ballLeft, ballTop + ballHeight + 1);
-
-            if (!bricks[i]->isDestroyed()) {
-                if(bricks[i]->getRectangle().contains(pointRight)) {
-                    ball->setX(-1);
+            bool flag = false;
+                if(bricks[i]->getRectangle().contains(topLeft)
+                        && bricks[i]->getRectangle().contains(bottomLeft)){
+                    ball->setX(-1*ball->getX());
+                    flag = true;
                 }
 
-                else if(bricks[i]->getRectangle().contains(pointLeft)) {
-                    ball->setX(1);
+                if(bricks[i]->getRectangle().contains(bottomLeft)&&
+                        bricks[i]->getRectangle().contains(bottomRight)) {
+                    ball->setY(-1*ball->getY());
+                    flag = true;
                 }
 
-                if(bricks[i]->getRectangle().contains(pointTop)) {
-                    ball->setY(1);
+                if(bricks[i]->getRectangle().contains(topLeft)&&
+                        bricks[i]->getRectangle().contains(topRight)) {
+                    ball->setY(-1*ball->getY());
+                    flag = true;
                 }
 
-                else if(bricks[i]->getRectangle().contains(pointBottom)) {
-                    ball->setY(-1);
+                if(bricks[i]->getRectangle().contains(bottomRight) &&
+                   bricks[i]->getRectangle().contains(topRight)) {
+                    ball->setX(-1*ball->getX());
+                    flag = true;
+                }
+
+                if (!flag) {
+                    if(bricks[i]->getRectangle().contains(bottomRight)) {
+                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                            ball->setX(-1 * ball->getX());
+                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
+                            ball->setY(-1 * ball->getY());
+                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                            ball->setX(-1 * ball->getX());
+                            ball->setY(-1 * ball->getY());
+                        }
+                    } else if(bricks[i]->getRectangle().contains(topRight)) {
+                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                            ball->setX(-1 * ball->getX());
+                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
+                            ball->setY(-1 * ball->getY());
+                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                            ball->setX(-1 * ball->getX());
+                            ball->setY(-1 * ball->getY());
+                        }
+                    } else if(bricks[i]->getRectangle().contains(bottomRight)) {
+                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                            ball->setX(-1 * ball->getX());
+                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
+                            ball->setY(-1 * ball->getY());
+                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                            ball->setX(-1 * ball->getX());
+                            ball->setY(-1 * ball->getY());
+                        }
+                    } else if(bricks[i]->getRectangle().contains(bottomRight)) {
+                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                            ball->setX(-1 * ball->getX());
+                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
+                            ball->setY(-1 * ball->getY());
+                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                            ball->setX(-1 * ball->getX());
+                            ball->setY(-1 * ball->getY());
+                        }
+                    }
+
                 }
 
                 bricks[i]->setDestroyed(true);
             }
-        }
     }
 }
 
