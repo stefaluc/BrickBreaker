@@ -2,7 +2,7 @@
 #include <iostream>
 
 Brick::Brick(int x, int y) {
-    image.load("brickie.png");
+    image.load("brick.png");
     destroyed = false;
     rectangle = image.rect();
     rectangle.translate(x, y);
