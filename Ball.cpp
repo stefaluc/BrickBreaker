@@ -49,17 +49,17 @@ void Ball::ballMove() {
     rectangle.translate(xCoord, yCoord);
 
     // if ball hits left wall, reverse horizontal speed
-    if(rectangle.left() == 0) {
+    if(rectangle.left() == Left_Wall) {
         xCoord = 1;
     }
     
     // if ball hits right wall, reverse horizontal speed
-    if(rectangle.right() == RIGHT_EDGE) {
+    if(rectangle.right() == Right_Wall) {
         xCoord = -1;
     }
 
     // if ball hits top wall, reverse vertical speed
-    if(rectangle.top() == 0) {
+    if(rectangle.top() == Top_Wall) {
         yCoord = 1;
     }
 }
