@@ -2,36 +2,42 @@
 #include <iostream>
 
 Paddle::Paddle() {
-    dx = 0;    
+    vx = 0;
     image.load("paddle.png");
 
-    rect = image.rect();
+    rectangle = image.rect();
     resetState();
 }
 
 Paddle::~Paddle() {
-    std::cout << ("Paddle deleted") << std::cout;
+
 }
 
-void Paddle::setDx(int x) {
-    dx = x;
-}
-
-void Paddle::move() {
-    int x = rect.x() + dx;
-    int y = rect.top();
-
-    rect.moveTo(x, y);
+void Paddle::setvx(int x) {
+    vx = x;
 }
 
 void Paddle::resetState() {
-    rect.moveTo(INITIAL_X, INITIAL_Y);
+    rectangle.moveTo(INIT_X, INIT_Y);
 }
 
-QRect Paddle::getRect() {
-    return rect;
+QRect Paddle::getRectangle() {
+    return rectangle;
 }
 
 QImage & Paddle::getImage() {
     return image;
+}
+
+void Paddle::move() {
+
+    if (rectangle.x() <= 0 && vx == -1) {
+        vx = 0;
+    } else if((rectangle.x() + rectangle.width()) >= 300 && vx == 1) {
+        vx = 0;
+    }
+
+    int x= rectangle.x() + vx;
+    int y = rectangle.top();
+    rectangle.moveTo(x, y);
 }
