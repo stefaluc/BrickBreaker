@@ -2,61 +2,65 @@
 #include <iostream>
 
 Ball::Ball() {
-    // set inital direction to north-east
-    xdir = 1;
-    ydir = -1;
-
+    // set inital trajectory of ball
+    xCoord = -1;
+    yCoord = -1;
     image.load("ball.png");
-
-    rect = image.rect();
+    rectangle = image.rect();
     resetState();
 }
 
-// called on every game tick
-void Ball::autoMove() {
-    rect.translate(xdir, ydir);
+Ball::~Ball() {
 
-    // ball hit left edge, set ball dir east
-    if(rect.left() == 0) {
-        xdir = 1;
-    }
-    
-    // ball hit right edge, set ball dir west
-    if(rect.right() == RIGHT_EDGE) {
-        xdir = -1;
-    }
 
-    // ball hit top edge, set ball dir south
-    if(rect.top() == 0) {
-        ydir = 1;
-    }
 }
 
-// reset ball position to initial
-void Ball::resetSate() {
-    rect.moveTo(INITIAL_X, INITIAL_Y);
+// reset ball position
+void Ball::resetState() {
+    rectangle.moveTo(INITIAL_X, INITIAL_Y);
 }
 
-void Ball::setXDir(int x) {
-    xdir = x;
+void Ball::setX(int x) {
+    xCoord = x;
 }
 
-void Ball::setYDir(int y) {
-    ydir = y;
+void Ball::setY(int y) {
+    yCoord = y;
 }
 
-int Ball::getXDir() {
-    return xdir;
+int Ball::getX() {
+    return xCoord;
 }
 
-int Ball::getYDir() {
-    return ydir;
+int Ball::getY() {
+    return yCoord;
 }
 
-QRect Ball::getRect() {
-    return rect;
+QRect Ball::getRectangle() {
+    return rectangle;
 }
 
 QImage & Ball::getImage() {
     return image;
 }
+
+// called whenever frame is refreshed
+void Ball::ballMove() {
+    rectangle.translate(xCoord, yCoord);
+
+    // if ball hits left wall, reverse horizontal speed
+    if(rectangle.left() == 0) {
+        xCoord = 1;
+    }
+    
+    // if ball hits right wall, reverse horizontal speed
+    if(rectangle.right() == RIGHT_EDGE) {
+        xCoord = -1;
+    }
+
+    // if ball hits top wall, reverse vertical speed
+    if(rectangle.top() == 0) {
+        yCoord = 1;
+    }
+}
+
