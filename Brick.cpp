@@ -2,22 +2,21 @@
 #include <iostream>
 
 Brick::Brick(int x, int y) {
-    image.load("brick.png");
+    image.load("brickie.png");
     destroyed = false;
-    rect = image.rect();
-    rect.translate(x, y);
+    rectangle = image.rect();
+    rectangle.translate(x, y);
 }
 
 Brick::~Brick() {
-    std::cout << "Brick deleted" << std::endl;
 }
 
-QRect Brick::getRect() {
-    return rect;
+QRect Brick::getRectangle() {
+    return rectangle;
 }
 
-void Brick::setRect(QRect rect) {
-    Brick::rect = rect;
+void Brick::setRectangle(QRect rectangle) {
+    Brick::rectangle = rectangle;
 }
 
 QImage & Brick::getImage() {
