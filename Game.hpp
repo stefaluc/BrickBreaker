@@ -28,6 +28,7 @@ private:
     int x;
     int timer;
     int score;
+    int lives;
     static const int noBricks = 30;
     static const int DELAY = 10;
     static const int BOTTOM_EDGE = 400;
