@@ -17,7 +17,7 @@ Ball::~Ball() {
 
 // reset ball position
 void Ball::resetState() {
-    rectangle.moveTo(INITIAL_X, INITIAL_Y);
+    rectangle.moveTo(Initial_X, Initial_Y);
 }
 
 void Ball::setX(int x) {
@@ -49,18 +49,18 @@ void Ball::ballMove() {
     rectangle.translate(xCoord, yCoord);
 
     // if ball hits left wall, reverse horizontal speed
-    if(rectangle.left() == Left_Wall) {
-        xCoord = 1;
+    if(rectangle.left() <= Left_Wall) {
+        xCoord = -1 * xCoord;
     }
     
     // if ball hits right wall, reverse horizontal speed
-    if(rectangle.right() == Right_Wall) {
-        xCoord = -1;
+    if(rectangle.right() >= Right_Wall) {
+        xCoord = -1 * xCoord;
     }
 
     // if ball hits top wall, reverse vertical speed
-    if(rectangle.top() == Top_Wall) {
-        yCoord = 1;
+    if(rectangle.top() <= Top_Wall) {
+        yCoord = -1 * yCoord;
     }
 }
 
