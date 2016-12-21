@@ -11,6 +11,7 @@ public:
     void resetState();
     void move();
     void setvx(int);
+    int getvx();
     QRect getRectangle();
     QImage & getImage();
 
@@ -18,6 +19,6 @@ private:
     QImage image;
     QRect rectangle;
     int vx;
-    static const int INIT_X = 135;
-    static const int INIT_Y = 380;
+    static const int Initial_X = 135;
+    static const int Initial_Y = 380;
 };
