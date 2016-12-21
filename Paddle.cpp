@@ -17,8 +17,12 @@ void Paddle::setvx(int x) {
     vx = x;
 }
 
+int Paddle::getvx(){
+    return vx;
+}
+
 void Paddle::resetState() {
-    rectangle.moveTo(INIT_X, INIT_Y);
+    rectangle.moveTo(Initial_X, Initial_Y);
 }
 
 QRect Paddle::getRectangle() {
