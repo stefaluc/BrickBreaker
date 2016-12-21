@@ -10,14 +10,14 @@ public:
 public:
     void resetState();
     void move();
-    void setDx(int);
-    QRect getRect();
+    void setvx(int);
+    QRect getRectangle();
     QImage & getImage();
 
 private:
     QImage image;
-    QRect rect;
-    int dx;
-    static const int INITIAL_X = 200;
-    static const int INITIAL_Y = 360;
+    QRect rectangle;
+    int vx;
+    static const int INIT_X = 135;
+    static const int INIT_Y = 380;
 };
