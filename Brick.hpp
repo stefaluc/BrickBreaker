@@ -4,8 +4,8 @@
 class Brick {
 public:
     /** 
-    * @brief Constructor for a Brick object. Sets initial state to
-    *        not destroyed and its Qt rect and image.
+    * @brief Default constructor for a Brick object. Sets initial state to
+    *        not destroyed and its Qt rectangle and image.
     *
     * @param x x-coordinate of Brick
     * @param y y-coordinate of Brick
@@ -19,12 +19,12 @@ public:
 public:
     bool isDestroyed();
     void setDestroyed(bool);
-    QRect getRect();
-    void setRect(QRect);
+    QRect getRectangle();
+    void setRectangle(QRect);
     QImage & getImage();
 
 private:
     QImage image;
-    QRect rect;
+    QRect rectangle;
     bool destroyed;
 };
