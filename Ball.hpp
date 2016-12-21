@@ -8,27 +8,21 @@ public:
 
 public:
     void resetState();
-    void autoMove();
-    void setXDir(int);
-    void setYDir(int);
-    int getXDir();
-    int getYDir();
-    QRect getRect();
+    void ballMove();
+    void setX(int);
+    void setY(int);
+    int getX();
+    int getY();
+    QRect getRectangle();
     QImage & getImage();
 
 private:
-    // 
-    //         North(-1Y)
-    //            ^
-    // East(-1X) < > West(1X)
-    //            v
-    //        South(1Y)
-    // 
-    int xdir;
-    int ydir;
+
+    int xCoord;
+    int yCoord;
     QImage image;
-    QRect rect;
-    static const int INITIAL_X = 230;
-    static const int INITIAL_Y = 355;
+    QRect rectangle;
+    static const int INITIAL_X = 155;
+    static const int INITIAL_Y = 375;
     static const int RIGHT_EDGE = 300;
 };
