@@ -205,41 +205,44 @@ void Game::Physics() {
 
                 if (!flag) {
                     if(bricks[i]->getRectangle().contains(bottomRight)) {
-                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                        if (ball->getX() >= 0 && ball->getY() < 0) {
                             ball->setX(-1 * ball->getX());
-                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
-                            ball->setY(-1 * ball->getY());
-                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                        }
+                        else if (ball->getX() <= 0 && ball->getY() > 0) {
+                            ball->setY(-1 * ball->getX());
+                        }
+                        else if (ball->getX() >= 0 && ball->getY() > 0) {
                             ball->setX(-1 * ball->getX());
                             ball->setY(-1 * ball->getY());
                         }
                     } else if(bricks[i]->getRectangle().contains(topRight)) {
-                        if (ball->getX() >= 0 && ball->getY() > 0) {
-                            ball->setX(-1 * ball->getX());
-                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
-                            ball->setY(-1 * ball->getY());
-                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
-                            ball->setX(-1 * ball->getX());
+                        if (ball->getY() < 0) {
                             ball->setY(-1 * ball->getY());
                         }
-                    } else if(bricks[i]->getRectangle().contains(bottomRight)) {
-                        if (ball->getX() >= 0 && ball->getY() > 0) {
+                        else if (ball->getX() >= 0 && ball->getY() > 0) {
                             ball->setX(-1 * ball->getX());
-                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
-                            ball->setY(-1 * ball->getY());
-                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
+                        }
+                    }
+                    else if(bricks[i]->getRectangle().contains(bottomLeft)) {
+                        if (ball->getX() <= 0 && ball->getY() > 0) {
                             ball->setX(-1 * ball->getX());
+                            ball->setY(-1*ball->getY());
+                        }
+                        else if (ball->getX() <= 0 && ball->getY() < 0) {
+                            ball->setX(-1 * ball->getX());
+                        }
+                        else if (ball->getX() >= 0 && ball->getY() > 0) {
                             ball->setY(-1 * ball->getY());
                         }
-                    } else if(bricks[i]->getRectangle().contains(bottomRight)) {
-                        if (ball->getX() >= 0 && ball->getY() > 0) {
-                            ball->setX(-1 * ball->getX());
-                        } else if (ball->getX() <= 0 && ball->getY() < 0) {
-                            ball->setY(-1 * ball->getY());
-                        } else if (ball->getX() >= 0 && ball->getY() < 0) {
-                            ball->setX(-1 * ball->getX());
+                    }
+                    else if(bricks[i]->getRectangle().contains(topLeft)) {
+                        if ( ball->getY() < 0) {
                             ball->setY(-1 * ball->getY());
                         }
+                        else if (ball->getX() <= 0 && ball->getY() > 0) {
+                            ball->setX(-1 * ball->getX());
+                        }
+
                     }
 
                 }
@@ -261,6 +264,7 @@ void Game::startGame() {
         gameEnded = false;
         gameWon = false; 
         gameStarted = true;
+        lives=3;
         timer = startTimer(DELAY);
     } 
 }
@@ -279,6 +283,7 @@ void Game::endGame() {
     killTimer(timer);
     gameEnded = true;
     gameStarted = false;
+
 }
 void Game::endGame(QPainter *painter, QString msg) {
 
