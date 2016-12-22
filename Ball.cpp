@@ -44,7 +44,6 @@ QImage & Ball::getImage() {
     return image;
 }
 
-// called whenever frame is refreshed
 void Ball::ballMove() {
     rectangle.translate(xCoord, yCoord);
 
